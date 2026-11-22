@@ -201,15 +201,15 @@ class CreditRiskEngine:
             net_profit = 0.0
             roi_pct = 0.0
 
-        # Compute Profit Curve across every 1% integer cutoff (5% to 100%) to match UI slider
-        cutoffs = np.arange(5, 101) / 100.0
+        # Compute Profit Curve across every 1% integer cutoff (5% to 100%) using identical c_int / 100.0 float math
         curve_cutoffs = []
         curve_profits = []
         curve_def_rates = []
 
-        for c in cutoffs:
+        for c_int in range(5, 101):
+            c = c_int / 100.0
             sub = df_sim[df_sim[pd_col] <= c]
-            curve_cutoffs.append(int(round(c * 100)))
+            curve_cutoffs.append(c_int)
             curve_profits.append(round(float(sub["realized_pnl"].sum()), 0))
             curve_def_rates.append(round(float(sub["loan_status"].mean() * 100) if len(sub) > 0 else 0.0, 2))
 

@@ -5,6 +5,7 @@ Warm Copper & Slate Executive Fintech Design · Bento Grid Architecture
 
 import os
 import sys
+import importlib
 import numpy as np
 import pandas as pd
 import streamlit as st
@@ -14,6 +15,8 @@ import plotly.graph_objects as go
 current_dir = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.join(current_dir, "src"))
 
+import predictor
+importlib.reload(predictor)
 from predictor import CreditRiskEngine
 
 st.set_page_config(
@@ -428,13 +431,13 @@ st.markdown("""
 
 
 @st.cache_resource
-def load_credit_engine():
+def load_credit_engine(cache_version: str = "2.0"):
     models_dir = os.path.join(current_dir, "models")
     clean_csv = os.path.join(current_dir, "data", "processed", "credit_risk_clean.csv")
     return CreditRiskEngine(models_dir, clean_csv)
 
 
-engine = load_credit_engine()
+engine = load_credit_engine(cache_version="2.0")
 
 # -------------------------------------------------------------------------
 # 3. ENCABEZADO Y CONTROLES SECUNDARIOS COMPACTOS
