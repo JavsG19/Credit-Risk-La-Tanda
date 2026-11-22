@@ -807,15 +807,48 @@ with tab_port:
             """, unsafe_allow_html=True)
 
     with pol_c2:
-        m1, m2, m3, m4 = st.columns(4)
+        def_diff = sim["port_default_rate"] - sim["base_default_rate"]
+        net_sign = "+" if sim["net_profit"] > 0 else ("-" if sim["net_profit"] < 0 else "")
+        net_color = "#15803D" if sim["net_profit"] >= 0 else "#DC2626"
+        base_sign = "-" if sim["base_net_profit"] < 0 else ""
+        val_sign = "+" if sim["value_added_vs_base"] >= 0 else "-"
+        val_color = "#15803D" if sim["value_added_vs_base"] >= 0 else "#DC2626"
+
+        m1, m2, m3, m4 = st.columns(4, gap="small")
         with m1:
-            st.metric("Tasa de Aprobación", f"{sim['approval_rate']:.1f}%", f"{sim['n_approved']:,d} de {sim['total_apps']:,d}")
+            st.markdown(f"""
+            <div class="ab-card" style="padding: 15px 16px;">
+                <div class="ab-card-lbl">Tasa de Aprobación</div>
+                <div class="ab-card-val" style="font-size: 1.38rem;">{sim['approval_rate']:.1f}%</div>
+                <div class="ab-card-sub" style="color: #15803D; font-weight: 600;">{sim['n_approved']:,d} de {sim['total_apps']:,d}</div>
+            </div>
+            """, unsafe_allow_html=True)
         with m2:
-            st.metric("Índice de Morosidad", f"{sim['port_default_rate']:.2f}%", f"{sim['port_default_rate'] - sim['base_default_rate']:+.2f}% vs base", delta_color="inverse")
+            st.markdown(f"""
+            <div class="ab-card" style="padding: 15px 16px;">
+                <div class="ab-card-lbl">Índice de Morosidad</div>
+                <div class="ab-card-val" style="font-size: 1.38rem;">{sim['port_default_rate']:.2f}%</div>
+                <div class="ab-card-sub" style="color: #15803D; font-weight: 600;">{def_diff:+.2f}% vs base</div>
+            </div>
+            """, unsafe_allow_html=True)
         with m3:
-            st.metric("Utilidad Neta Cartera", f"${sim['net_profit']:,.0f}", f"ROA {sim['roi_pct']:+.2f}%")
+            st.markdown(f"""
+            <div class="ab-card" style="padding: 15px 16px;">
+                <div class="ab-card-lbl">Utilidad Neta Cartera</div>
+                <div class="ab-card-val" style="font-size: 1.38rem; color: {net_color};">{net_sign}${abs(sim['net_profit']):,.0f}</div>
+                <div class="ab-card-sub" style="color: #57534E; font-weight: 600;">ROA {sim['roi_pct']:+.2f}%</div>
+            </div>
+            """, unsafe_allow_html=True)
         with m4:
-            st.metric("Valor Agregado Modelo", f"+${sim['value_added_vs_base']:,.0f}", f"Sin filtro ${sim['base_net_profit']:,.0f}")
+            st.markdown(f"""
+            <div class="ab-card" style="padding: 15px 16px;">
+                <div class="ab-card-lbl">Valor Agregado Modelo</div>
+                <div class="ab-card-val" style="font-size: 1.38rem; color: {val_color};">{val_sign}${abs(sim['value_added_vs_base']):,.0f}</div>
+                <div class="ab-card-sub" style="color: #57534E; font-weight: 600;">Sin filtro {base_sign}${abs(sim['base_net_profit']):,.0f}</div>
+            </div>
+            """, unsafe_allow_html=True)
+
+        st.markdown("<div style='height: 12px;'></div>", unsafe_allow_html=True)
 
         with st.container(border=True):
             st.markdown('<div class="card-title-main">Curva de Rentabilidad Neta de la Cartera</div>', unsafe_allow_html=True)
