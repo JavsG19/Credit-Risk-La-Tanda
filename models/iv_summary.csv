@@ -1,0 +1,12 @@
+Variable,Nombre_Negocio,Information_Value_IV,Poder_Predictivo
+loan_grade,Calificación Preliminar de Buró (Grado A-G),0.8782,Muy Fuerte (Predictor Clave)
+loan_percent_income,Ratio Deuda / Ingreso (Loan-to-Income),0.7692,Muy Fuerte (Predictor Clave)
+loan_int_rate,Tasa de Interés Asignada (%),0.7139,Muy Fuerte (Predictor Clave)
+person_income,Ingreso Anual del Solicitante ($),0.4647,Muy Fuerte (Predictor Clave)
+person_home_ownership,Situación de Vivienda (Propia/Renta/Hipoteca),0.3811,Muy Fuerte (Predictor Clave)
+cb_person_default_on_file,Impago Histórico en Buró (Sí/No),0.1486,Fuerte
+loan_intent,Propósito / Destino del Crédito,0.0906,Moderado
+loan_amnt,Monto Solicitado ($),0.0802,Moderado
+person_emp_length,Antigüedad Laboral / Negocio (Años),0.0512,Moderado
+person_age,Edad del Solicitante,0.0079,Débil
+cb_person_cred_hist_length,Antigüedad en Buró de Crédito (Años),0.0053,Débil
