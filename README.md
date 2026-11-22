@@ -1,9 +1,9 @@
-# CreditIQ Analytics: Credit Risk Scoring & Portfolio Optimization Engine
+# La Tanda: Credit Risk Scoring & Portfolio Optimization Engine
 
-[![Python 3.12](https://img.shields.io/badge/Python-3.12-0F172A.svg)](https://www.python.org/)
-[![Streamlit](https://img.shields.io/badge/Streamlit-App-0284C7.svg)](https://streamlit.io/)
+[![Python 3.12](https://img.shields.io/badge/Python-3.12-1C1917.svg)](https://www.python.org/)
+[![Streamlit](https://img.shields.io/badge/Streamlit-App-D97742.svg)](https://streamlit.io/)
 [![Scikit-Learn](https://img.shields.io/badge/Scikit--Learn-1.3+-F7931E.svg)](https://scikit-learn.org/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-059669.svg)](https://opensource.org/licenses/MIT)
+[![License: MIT](https://img.shields.io/badge/License-MIT-15803D.svg)](https://opensource.org/licenses/MIT)
 
 An end-to-end **Credit Risk Underwriting & Portfolio Economics Engine** designed for digital lending platforms (Fintech / SME & Consumer Credit).
 

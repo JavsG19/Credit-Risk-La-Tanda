@@ -1,5 +1,5 @@
 """
-Streamlit Web Application: CreditIQ — Plataforma de Suscripción y Riesgo Crediticio
+Streamlit Web Application: La Tanda — Plataforma de Suscripción y Riesgo Crediticio
 Warm Copper & Slate Executive Fintech Design · Bento Grid Architecture
 """
 
@@ -17,7 +17,7 @@ sys.path.append(os.path.join(current_dir, "src"))
 from predictor import CreditRiskEngine
 
 st.set_page_config(
-    page_title="CreditIQ | Suscripción y Riesgo Crediticio",
+    page_title="La Tanda | Suscripción y Riesgo Crediticio",
     layout="wide",
     initial_sidebar_state="collapsed",
 )
@@ -340,6 +340,89 @@ st.markdown("""
         line-height: 1.55;
         font-variant-numeric: tabular-nums;
     }
+
+    /* Champion & Challenger Badges */
+    .badge-champion {
+        background-color: #E7E5E4;
+        color: #1C1917;
+        border: 1px solid #D6D3D1;
+        font-size: 10px;
+        font-weight: 700;
+        padding: 3px 9px;
+        border-radius: 99px;
+        margin-left: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        display: inline-block;
+        vertical-align: middle;
+    }
+    .badge-challenger {
+        background-color: #FDF3ED;
+        color: #9A3412;
+        border: 1px solid #FDBA74;
+        font-size: 10px;
+        font-weight: 700;
+        padding: 3px 9px;
+        border-radius: 99px;
+        margin-left: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        display: inline-block;
+        vertical-align: middle;
+    }
+
+    /* A/B Impact Metric Cards */
+    .ab-card {
+        background-color: #FFFFFF;
+        border: 1px solid #E7E5E4;
+        border-radius: 10px;
+        padding: 18px 20px;
+        height: 100%;
+        box-shadow: 0 1px 2px rgba(28, 25, 23, 0.03);
+    }
+    .ab-card-lbl {
+        font-size: 0.72rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: #57534E;
+        margin-bottom: 6px;
+    }
+    .ab-card-val {
+        font-size: 1.48rem;
+        font-weight: 800;
+        color: #1C1917;
+        line-height: 1.2;
+        font-variant-numeric: tabular-nums;
+        margin-bottom: 4px;
+    }
+    .ab-card-sub {
+        font-size: 0.78rem;
+        color: #57534E;
+        font-variant-numeric: tabular-nums;
+    }
+
+    /* Governance Roadmap Cards */
+    .gov-card {
+        background-color: #FFFFFF;
+        border: 1px solid #E7E5E4;
+        border-top: 3px solid #D97742;
+        border-radius: 10px;
+        padding: 18px 20px;
+        height: 100%;
+        box-shadow: 0 1px 2px rgba(28, 25, 23, 0.03);
+    }
+    .gov-step-title {
+        font-size: 0.9rem;
+        font-weight: 700;
+        color: #1C1917;
+        margin-bottom: 6px;
+    }
+    .gov-step-desc {
+        font-size: 0.84rem;
+        color: #57534E;
+        line-height: 1.55;
+    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -359,9 +442,9 @@ engine = load_credit_engine()
 st.markdown("""
 <div class="top-navbar">
     <div class="nav-brand">
-        <div class="nav-logo">IQ</div>
+        <div class="nav-logo">LT</div>
         <div>
-            <p class="nav-title">CreditIQ · Plataforma de Suscripción y Riesgo Crediticio</p>
+            <p class="nav-title">La Tanda · Plataforma de Suscripción y Riesgo Crediticio</p>
             <p class="nav-subtitle">Originación Financiera · Modelos de Calificación y Rentabilidad de Cartera</p>
         </div>
     </div>
@@ -798,7 +881,7 @@ with tab_audit:
         </thead>
         <tbody>
             <tr>
-                <td>Regresión Logística · Scorecard Bancario WoE</td>
+                <td>Regresión Logística · Scorecard Bancario WoE <span class="badge-champion">CHAMPION</span></td>
                 <td>0.8746</td>
                 <td>0.7493</td>
                 <td>62.62%</td>
@@ -807,7 +890,7 @@ with tab_audit:
                 <td>0.6846</td>
             </tr>
             <tr class="win-row">
-                <td>Random Forest Classifier · Ensamble de 300 Árboles <span class="win-pill">Mejor Desempeño</span></td>
+                <td>Random Forest Classifier · Ensamble de 300 Árboles <span class="badge-challenger">CHALLENGER</span></td>
                 <td>0.9330</td>
                 <td>0.8661</td>
                 <td>72.98%</td>
@@ -922,3 +1005,124 @@ with tab_audit:
                 margin=dict(l=10, r=24, t=14, b=10), height=325
             )
             st.plotly_chart(fig_iv, use_container_width=True, config={"displayModeBar": False})
+
+    # ---------------------------------------------------------------------
+    # B) ESTRATEGIA DE DESPLIEGUE GRADUAL CHAMPION VS. CHALLENGER (A/B TEST)
+    # ---------------------------------------------------------------------
+    st.markdown('<hr style="border: none; border-top: 1px solid #E7E5E4; margin: 2.25rem 0 1.75rem 0;">', unsafe_allow_html=True)
+
+    st.markdown('<div class="section-title">Estrategia de Despliegue Champion vs. Challenger</div>', unsafe_allow_html=True)
+    st.markdown(
+        '<div class="section-desc">Simulación de asignación controlada de tráfico para validar el modelo retador sin comprometer la cartera</div>',
+        unsafe_allow_html=True,
+    )
+
+    ab_col1, ab_col2 = st.columns([1.05, 1.95], gap="large")
+
+    with ab_col1:
+        with st.container(border=True):
+            st.markdown('<div style="padding: 4px 4px 6px 4px;">', unsafe_allow_html=True)
+            st.markdown('<div class="card-title-main">Asignación de Tráfico A/B</div>', unsafe_allow_html=True)
+            st.markdown('<div class="card-subtitle-muted">Control gradual de exposición en originación</div>', unsafe_allow_html=True)
+
+            challenger_pct = st.slider(
+                "Porcentaje de solicitudes asignadas al Challenger",
+                min_value=0,
+                max_value=100,
+                value=20,
+                step=5,
+                format="%d%%",
+            )
+            champion_pct = 100 - challenger_pct
+
+            st.markdown(f"""
+            <div style="margin-top: 14px; background-color: #FAFAF9; border: 1px solid #E7E5E4; border-radius: 8px; padding: 14px 16px;">
+                <div style="font-size: 0.88rem; font-weight: 700; color: #1C1917; margin-bottom: 10px;" class="tabular-nums">
+                    {champion_pct}% Champion &nbsp;·&nbsp; {challenger_pct}% Challenger
+                </div>
+                <div style="display: flex; width: 100%; height: 10px; border-radius: 99px; overflow: hidden; background-color: #E7E5E4;">
+                    <div style="width: {champion_pct}%; background-color: #57534E; height: 100%;"></div>
+                    <div style="width: {challenger_pct}%; background-color: #D97742; height: 100%;"></div>
+                </div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.72rem; color: #57534E; margin-top: 8px; font-weight: 600;">
+                    <span>Regresión Logística WoE</span>
+                    <span>Random Forest</span>
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
+            st.markdown('</div>', unsafe_allow_html=True)
+
+    with ab_col2:
+        sim_champ = engine.simulate_portfolio_policy(max_pd_cutoff=0.22, lgd=0.75, active_model="Regresión Logística")
+        sim_chall = engine.simulate_portfolio_policy(max_pd_cutoff=0.22, lgd=0.75, active_model="Random Forest")
+
+        w_chall = challenger_pct / 100.0
+        combined_profit = (1.0 - w_chall) * sim_champ["net_profit"] + w_chall * sim_chall["net_profit"]
+        incremental_profit = combined_profit - sim_champ["net_profit"]
+        exposure_count = int(round(sim_chall["total_apps"] * w_chall))
+        inc_color = "#15803D" if incremental_profit > 0 else "#1C1917"
+        inc_sign = "+" if incremental_profit > 0 else ""
+
+        ab_m1, ab_m2, ab_m3 = st.columns(3, gap="medium")
+        with ab_m1:
+            st.markdown(f"""
+            <div class="ab-card">
+                <div class="ab-card-lbl">Utilidad Neta Combinada</div>
+                <div class="ab-card-val">${combined_profit:,.0f} USD</div>
+                <div class="ab-card-sub">Resultado ponderado bajo umbral 22%</div>
+            </div>
+            """, unsafe_allow_html=True)
+        with ab_m2:
+            st.markdown(f"""
+            <div class="ab-card">
+                <div class="ab-card-lbl">Utilidad Incremental</div>
+                <div class="ab-card-val" style="color: {inc_color};">{inc_sign}${incremental_profit:,.0f} USD</div>
+                <div class="ab-card-sub">Valor extra frente a 100% Champion</div>
+            </div>
+            """, unsafe_allow_html=True)
+        with ab_m3:
+            st.markdown(f"""
+            <div class="ab-card">
+                <div class="ab-card-lbl">Exposición en Prueba</div>
+                <div class="ab-card-val">{exposure_count:,d} créditos</div>
+                <div class="ab-card-sub">Evaluados por Challenger de {sim_chall['total_apps']:,d}</div>
+            </div>
+            """, unsafe_allow_html=True)
+
+        st.markdown("<div style='height: 14px;'></div>", unsafe_allow_html=True)
+        st.markdown(f"""
+        <div class="copper-callout">
+            <b>Lectura Ejecutiva del Piloto</b><br>
+            Bajo un esquema operativo con umbral de impago del 22%, operar al 100% con el modelo titular Champion genera <b>${sim_champ['net_profit']:,.0f} USD</b> netos. 
+            Al desviar el <b>{challenger_pct}%</b> del tráfico hacia el modelo Challenger se capturan <b>{inc_sign}${incremental_profit:,.0f} USD</b> adicionales sin exponer la totalidad de la cartera.
+        </div>
+        """, unsafe_allow_html=True)
+
+    # ---------------------------------------------------------------------
+    # C) HOJA DE RUTA DE GOBERNANZA BANCARIA (3 PASOS)
+    # ---------------------------------------------------------------------
+    st.markdown("<div style='height: 28px;'></div>", unsafe_allow_html=True)
+    st.markdown('<div class="card-title-main" style="margin-bottom: 12px;">Hoja de Ruta de Gobernanza</div>', unsafe_allow_html=True)
+
+    gov_c1, gov_c2, gov_c3 = st.columns(3, gap="medium")
+    with gov_c1:
+        st.markdown("""
+        <div class="gov-card">
+            <div class="gov-step-title">Paso 1 · Modo Sombra</div>
+            <div class="gov-step-desc">El modelo Challenger evalúa solicitudes en paralelo sin afectar decisiones reales para auditar su estabilidad.</div>
+        </div>
+        """, unsafe_allow_html=True)
+    with gov_c2:
+        st.markdown("""
+        <div class="gov-card">
+            <div class="gov-step-title">Paso 2 · Piloto Controlado</div>
+            <div class="gov-step-desc">Se asigna una fracción acotada del tráfico real mediante pruebas A/B para confirmar el valor financiero incremental.</div>
+        </div>
+        """, unsafe_allow_html=True)
+    with gov_c3:
+        st.markdown("""
+        <div class="gov-card">
+            <div class="gov-step-title">Paso 3 · Promoción a Champion</div>
+            <div class="gov-step-desc">Tras validar consistencia en cosechas reales y cumplimiento regulatorio, el retador asume como nuevo modelo titular.</div>
+        </div>
+        """, unsafe_allow_html=True)
