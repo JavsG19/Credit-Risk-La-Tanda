@@ -618,7 +618,22 @@ with tab_eval:
             sum_impacts = float(df_top["Impacto_Puntos"].sum())
             base_anchor = round(res["score_lr"] - sum_impacts, 1)
 
-            wf_x = ["Puntaje Base"] + df_top["Variable_Clean"].tolist() + ["Score Final"]
+            wf_label_map = {
+                "Ratio Deuda a Ingreso": "Deuda a<br>Ingreso",
+                "Grado en Buró": "Grado en<br>Buró",
+                "Tasa de Interés": "Tasa de<br>Interés",
+                "Ingreso Anual": "Ingreso<br>Anual",
+                "Tipo de Vivienda": "Tipo de<br>Vivienda",
+                "Historial de Impago": "Historial<br>de Impago",
+                "Destino del Crédito": "Destino del<br>Crédito",
+                "Monto Solicitado": "Monto<br>Solicitado",
+                "Antigüedad Laboral": "Antigüedad<br>Laboral",
+                "Edad del Cliente": "Edad del<br>Cliente",
+                "Antigüedad en Buró": "Antigüedad<br>en Buró",
+            }
+            wrapped_vars = [wf_label_map.get(v, v) for v in df_top["Variable_Clean"].tolist()]
+
+            wf_x = ["Puntaje<br>Base"] + wrapped_vars + ["Score<br>Final"]
             wf_y = [base_anchor] + df_top["Impacto_Puntos"].tolist() + [0]
             wf_measure = ["absolute"] + ["relative"] * len(df_top) + ["total"]
             wf_text = [f"{base_anchor:.0f}"] + [f"{v:+.1f}" for v in df_top["Impacto_Puntos"]] + [f"{res['score_lr']} pts"]
@@ -642,11 +657,11 @@ with tab_eval:
                 font={"family": "Plus Jakarta Sans, sans-serif", "color": "#1C1917"},
                 yaxis_title="Puntos de Score",
                 yaxis=dict(range=[y_min_wf, y_max_wf], showgrid=True, gridcolor="#F5F5F4", zeroline=False),
-                xaxis=dict(showgrid=False, tickangle=0, tickfont=dict(size=11)),
+                xaxis=dict(showgrid=False, tickangle=0, tickfont=dict(size=11, color="#57534E")),
                 plot_bgcolor="rgba(0,0,0,0)",
                 paper_bgcolor="rgba(0,0,0,0)",
-                margin=dict(l=12, r=12, t=22, b=12),
-                height=295,
+                margin=dict(l=12, r=12, t=22, b=24),
+                height=310,
                 showlegend=False,
             )
             st.plotly_chart(fig_wf, use_container_width=True, config={"displayModeBar": False})
