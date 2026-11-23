@@ -1,9 +1,11 @@
 # La Tanda: Credit Risk Scoring & Portfolio Optimization Engine
 
 [![Python 3.12](https://img.shields.io/badge/Python-3.12-1C1917.svg)](https://www.python.org/)
-[![Streamlit App](https://img.shields.io/badge/Streamlit-Web_App-D97742.svg)](https://streamlit.io/)
+[![Streamlit Live App](https://img.shields.io/badge/Streamlit_Live_App-Open_Dashboard-D97742.svg)](https://creditrisklatanda.streamlit.app/)
 [![Scikit-Learn](https://img.shields.io/badge/Scikit--Learn-1.3+-F7931E.svg)](https://scikit-learn.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-15803D.svg)](https://opensource.org/licenses/MIT)
+
+**Live Interactive Dashboard:** [https://creditrisklatanda.streamlit.app/](https://creditrisklatanda.streamlit.app/)
 
 An independent, personal Data Science project exploring how digital lenders and Fintech platforms make real-time credit underwriting decisions—balancing approval volume, default risk, and portfolio profitability.
 
@@ -149,6 +151,6 @@ streamlit run app.py
 
 **Actuarial Science & Data Science**
 
-[LinkedIn](https://www.linkedin.com/in/javier-hern%C3%A1n-garc%C3%ADa-s%C3%A1nchez-28328b15b/) · [GitHub](https://github.com/JavsG19)
+[Live Web App](https://creditrisklatanda.streamlit.app/) · [LinkedIn](https://www.linkedin.com/in/javier-hern%C3%A1n-garc%C3%ADa-s%C3%A1nchez-28328b15b/) · [GitHub](https://github.com/JavsG19)
 
 > *Disclaimer: Built as a personal portfolio project for educational and quantitative analytics demonstration purposes.*

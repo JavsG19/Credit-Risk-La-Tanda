@@ -620,8 +620,8 @@ with tab_eval:
                 fig_gauge = go.Figure(go.Indicator(
                     mode="gauge+number+delta",
                     value=res["score_selected"],
-                    number={"font": {"family": "Plus Jakarta Sans, sans-serif", "size": 40, "color": "#1C1917"}, "suffix": " pts"},
-                    delta={"reference": 600, "increasing": {"color": "#15803D"}, "decreasing": {"color": "#DC2626"}},
+                    number={"font": {"family": "Plus Jakarta Sans, sans-serif", "size": 28, "color": "#1C1917"}, "suffix": " pts"},
+                    delta={"reference": 600, "font": {"size": 15}, "increasing": {"color": "#15803D"}, "decreasing": {"color": "#DC2626"}},
                     gauge={
                         "axis": {
                             "range": [300, 850],
