@@ -447,14 +447,14 @@ st.markdown("""
     <div class="nav-brand">
         <div class="nav-logo">LT</div>
         <div>
-            <p class="nav-title">La Tanda · Plataforma de Suscripción y Riesgo Crediticio</p>
-            <p class="nav-subtitle">Originación Financiera · Modelos de Calificación y Rentabilidad de Cartera</p>
+            <p class="nav-title">La Tanda · Simulador de Evaluación y Riesgo Crediticio</p>
+            <p class="nav-subtitle">Proyecto de Portafolio · Calificación de Clientes y Rentabilidad de Cartera</p>
         </div>
     </div>
     <div class="nav-badges">
-        <span class="nav-pill">CARTERA AUDITADA: 32,409 CRÉDITOS</span>
-        <span class="nav-pill">MUESTRA DE VALIDACIÓN: 6,482</span>
-        <span class="nav-pill">ROC-AUC: 0.9330 · KS: 72.98%</span>
+        <span class="nav-pill">HISTORIAL ANALIZADO: 32,409 CRÉDITOS</span>
+        <span class="nav-pill">PRUEBA EN CASOS NUEVOS: 6,482</span>
+        <span class="nav-pill">PRECISIÓN GLOBAL: 93.0%</span>
     </div>
 </div>
 """, unsafe_allow_html=True)
@@ -463,20 +463,20 @@ st.markdown("""
 ctrl_c1, ctrl_c2 = st.columns([1.2, 1.2])
 with ctrl_c1:
     preset = st.selectbox(
-        "Expediente de Prueba",
+        "Perfil de Ejemplo",
         [
-            "Expediente A · Empresa Consolidada · Riesgo Bajo",
+            "Expediente A · Negocio Estable · Riesgo Bajo",
             "Expediente B · Perfil Intermedio · Riesgo Moderado",
-            "Expediente C · Nivel de Deuda Elevado · Riesgo Alto",
+            "Expediente C · Deuda Elevada frente al Ingreso · Riesgo Alto",
         ],
         index=0,
     )
 with ctrl_c2:
     active_model_label = st.selectbox(
-        "Motor de Calificación Activo",
+        "Modelo de Evaluación Activo",
         [
-            "Random Forest · Ensamble de 300 Árboles",
-            "Regresión Logística · Scorecard Bancario WoE",
+            "Random Forest · Modelo Avanzado de 300 Árboles",
+            "Regresión Logística · Scorecard Bancario Clásico",
         ],
         index=0,
     )
@@ -497,9 +497,9 @@ else:
 
 # Top Horizontal Tabs
 tab_eval, tab_port, tab_audit = st.tabs([
-    "Evaluación Individual",
-    "Simulador de Cartera",
-    "Auditoría de Modelos",
+    "Evaluación de un Solicitante",
+    "Simulador de Ganancias",
+    "Cómo Funciona y Comparativa",
 ])
 
 # =========================================================================
@@ -654,12 +654,12 @@ with tab_eval:
                     height=225,
                 )
                 st.plotly_chart(fig_gauge, use_container_width=True, config={"displayModeBar": False})
-                st.caption(f"Random Forest: {res['score_rf']} puntos · Scorecard WoE: {res['score_lr']} puntos · Referencia base: 600 puntos.")
+                st.caption(f"Modelo Avanzado: {res['score_rf']} puntos · Scorecard Clásico: {res['score_lr']} puntos · Referencia media: 600 puntos.")
 
         with bento_r1_c2:
             with st.container(border=True):
                 st.markdown('<div class="card-title-main">Resumen Financiero y de Riesgo</div>', unsafe_allow_html=True)
-                st.markdown('<div class="card-subtitle-muted">Indicadores económicos de la operación individual</div>', unsafe_allow_html=True)
+                st.markdown('<div class="card-subtitle-muted">Balance esperado si se otorga este préstamo</div>', unsafe_allow_html=True)
 
                 pnl_color = "#15803D" if res["expected_profit"] >= 0 else "#DC2626"
                 pnl_sign = "+" if res["expected_profit"] >= 0 else "-"
@@ -667,34 +667,34 @@ with tab_eval:
                 st.markdown(f"""
                 <div class="ledger-grid">
                     <div class="ledger-box">
-                        <div class="ledger-lbl">Probabilidad de Impago</div>
+                        <div class="ledger-lbl">Riesgo de No Pago</div>
                         <div class="ledger-val">{res['pd_selected']*100:.1f}%</div>
-                        <div class="ledger-note">RF: {res['pd_rf']*100:.1f}% · WoE: {res['pd_lr']*100:.1f}%</div>
+                        <div class="ledger-note">Árboles: {res['pd_rf']*100:.1f}% · Clásico: {res['pd_lr']*100:.1f}%</div>
                     </div>
                     <div class="ledger-box">
-                        <div class="ledger-lbl">Ratio Deuda a Ingreso</div>
+                        <div class="ledger-lbl">Peso de Deuda vs Ingreso</div>
                         <div class="ledger-val">{res['loan_percent_income']*100:.1f}%</div>
-                        <div class="ledger-note">${loan_amnt:,.0f} sobre ${person_income:,.0f} USD</div>
+                        <div class="ledger-note">${loan_amnt:,.0f} frente a ${person_income:,.0f} USD</div>
                     </div>
                     <div class="ledger-box">
-                        <div class="ledger-lbl">Interés vs Pérdida Esperada</div>
+                        <div class="ledger-lbl">Intereses vs Riesgo</div>
                         <div class="ledger-val">+${res['interest_revenue']:,.0f}</div>
-                        <div class="ledger-note" style="color: #DC2626;">Pérdida esperada: -${res['expected_loss']:,.0f}</div>
+                        <div class="ledger-note" style="color: #DC2626;">Pérdida estimada: -${res['expected_loss']:,.0f}</div>
                     </div>
                     <div class="ledger-box">
-                        <div class="ledger-lbl">Utilidad Neta Esperada</div>
+                        <div class="ledger-lbl">Ganancia Neta Esperada</div>
                         <div class="ledger-val" style="color: {pnl_color};">{pnl_sign}${abs(res['expected_profit']):,.0f}</div>
-                        <div class="ledger-note">Tasa de equilibrio: {res['break_even_rate']:.1f}%</div>
+                        <div class="ledger-note">Tasa mínima para empatar: {res['break_even_rate']:.1f}%</div>
                     </div>
                 </div>
                 """, unsafe_allow_html=True)
                 st.markdown("<div style='height: 10px;'></div>", unsafe_allow_html=True)
-                st.caption("La pérdida esperada pondera probabilidad de incumplimiento, severidad de pérdida del 75% y capital expuesto.")
+                st.caption("La pérdida estimada toma en cuenta qué tan probable es que el cliente deje de pagar y asume que en ese caso se pierde el 75% del préstamo.")
 
         # Row 2: Full-Width Score Waterfall Chart (Clean Labels, Zero Parentheses)
         with st.container(border=True):
-            st.markdown('<div class="card-title-main">Desglose del Score</div>', unsafe_allow_html=True)
-            st.markdown('<div class="card-subtitle-muted">Contribución de cada variable al puntaje final</div>', unsafe_allow_html=True)
+            st.markdown('<div class="card-title-main">¿Por qué obtuvo este puntaje?</div>', unsafe_allow_html=True)
+            st.markdown('<div class="card-subtitle-muted">Puntos que suma en verde o resta en rojo cada dato del cliente hasta formar su Score</div>', unsafe_allow_html=True)
 
             df_imp = res["impacts_df"].copy()
             df_imp["Variable_Clean"] = df_imp["Variable"].apply(clean_label)
@@ -756,10 +756,10 @@ with tab_eval:
 # PESTAÑA 2: SIMULADOR DE CARTERA
 # =========================================================================
 with tab_port:
-    st.markdown('<div class="section-title">Simulador de Política de Aprobación y Rentabilidad de Cartera</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-title">¿A quiénes conviene aprobar para maximizar las ganancias?</div>', unsafe_allow_html=True)
     st.markdown(
-        '<div class="section-desc">Evaluación financiera sobre las <b>6,482 solicitudes de validación</b>. '
-        'Define el umbral de riesgo permitido para optimizar el balance entre volumen de colocación, tasa de morosidad y utilidad neta.</div>',
+        '<div class="section-desc">Prueba práctica sobre <b>6,482 solicitudes reales</b> que el sistema no vio durante su entrenamiento. '
+        'Mueve el control de riesgo permitido para ver cómo cambian los préstamos aprobados, los atrasos y la ganancia total en dólares.</div>',
         unsafe_allow_html=True,
     )
 
@@ -767,24 +767,26 @@ with tab_port:
 
     with pol_c1:
         with st.container(border=True):
-            st.markdown('<div class="card-title-main">Política de Originación</div>', unsafe_allow_html=True)
-            st.markdown('<div class="card-subtitle-muted">Parámetros de corte del comité de crédito</div>', unsafe_allow_html=True)
+            st.markdown('<div class="card-title-main">Regla de Aprobación</div>', unsafe_allow_html=True)
+            st.markdown('<div class="card-subtitle-muted">Ajusta qué tanto riesgo estás dispuesto a aceptar</div>', unsafe_allow_html=True)
 
             cutoff_pct = st.slider(
-                "Umbral Máximo de Impago",
+                "Riesgo máximo permitido para aprobar",
                 min_value=5,
                 max_value=100,
                 value=22,
                 step=1,
                 format="%d%%",
+                help="Por ejemplo, en 22% solo se aprueban solicitudes cuya probabilidad estimada de no pagar sea de 22% o menos.",
             )
             lgd_pct = st.slider(
-                "Severidad de Pérdida",
+                "Porcentaje perdido cuando alguien no paga",
                 min_value=40,
                 max_value=100,
                 value=75,
                 step=5,
                 format="%d%%",
+                help="Si un cliente deja de pagar, qué parte del monto prestado ya no se logra recuperar.",
             )
             sim = engine.simulate_portfolio_policy(
                 max_pd_cutoff=cutoff_pct / 100.0,
@@ -794,18 +796,18 @@ with tab_port:
 
             st.markdown(f"""
             <div class="copper-callout" style="margin-top: 12px;">
-                <b>Punto de Equilibrio Óptimo</b><br>
-                La rentabilidad máxima de la cartera se alcanza con un umbral de <b>{sim['optimal_cutoff_pct']:.0f}%</b>, generando una utilidad neta de <b>+${sim['optimal_max_profit']:,.0f} USD</b>.
+                <b>Punto Ideal de Ganancia</b><br>
+                La mayor ganancia total se logra aceptando hasta un <b>{sim['optimal_cutoff_pct']:.0f}%</b> de riesgo, generando <b>+${sim['optimal_max_profit']:,.0f} USD</b> libres.
             </div>
             """, unsafe_allow_html=True)
 
             st.markdown(f"""
             <div style="background-color: #FAFAF9; border: 1px solid #E7E5E4; padding: 14px 16px; border-radius: 8px; font-size: 0.83rem; color: #1C1917; margin-top: 12px; line-height: 1.65; font-variant-numeric: tabular-nums;">
-                <b>Balance Financiero de Cartera · Umbral {cutoff_pct}%</b><br>
-                • Capital Colocado: <b>${sim['capital_deployed']:,.0f} USD</b><br>
-                • Ingresos por Intereses: <b style="color:#15803D;">+${sim['interest_earned']:,.0f} USD</b><br>
-                • Pérdida por Cartera Vencida: <b style="color:#DC2626;">-${sim['principal_lost']:,.0f} USD</b><br>
-                • Utilidad Neta Realizada: <b>${sim['net_profit']:,.0f} USD</b>
+                <b>Resumen en Dinero · Tope de {cutoff_pct}%</b><br>
+                • Dinero Prestado: <b>${sim['capital_deployed']:,.0f} USD</b><br>
+                • Intereses Cobrados: <b style="color:#15803D;">+${sim['interest_earned']:,.0f} USD</b><br>
+                • Pérdidas por Impago: <b style="color:#DC2626;">-${sim['principal_lost']:,.0f} USD</b><br>
+                • Ganancia Libre Final: <b>${sim['net_profit']:,.0f} USD</b>
             </div>
             """, unsafe_allow_html=True)
 
@@ -837,15 +839,15 @@ with tab_port:
         with m3:
             st.markdown(f"""
             <div class="ab-card" style="padding: 15px 16px;">
-                <div class="ab-card-lbl">Utilidad Neta Cartera</div>
+                <div class="ab-card-lbl">Ganancia Libre Total</div>
                 <div class="ab-card-val" style="font-size: 1.38rem; color: {net_color};">{net_sign}${abs(sim['net_profit']):,.0f}</div>
-                <div class="ab-card-sub" style="color: #57534E; font-weight: 600;">ROA {sim['roi_pct']:+.2f}%</div>
+                <div class="ab-card-sub" style="color: #57534E; font-weight: 600;">Rendimiento {sim['roi_pct']:+.2f}%</div>
             </div>
             """, unsafe_allow_html=True)
         with m4:
             st.markdown(f"""
             <div class="ab-card" style="padding: 15px 16px;">
-                <div class="ab-card-lbl">Valor Agregado Modelo</div>
+                <div class="ab-card-lbl">Mejora vs Aprobar Todo</div>
                 <div class="ab-card-val" style="font-size: 1.38rem; color: {val_color};">{val_sign}${abs(sim['value_added_vs_base']):,.0f}</div>
                 <div class="ab-card-sub" style="color: #57534E; font-weight: 600;">Sin filtro {base_sign}${abs(sim['base_net_profit']):,.0f}</div>
             </div>
@@ -895,29 +897,38 @@ with tab_port:
 # PESTAÑA 3: AUDITORÍA DE MODELOS
 # =========================================================================
 with tab_audit:
-    st.markdown('<div class="section-title">Auditoría de Modelos y Capacidad Predictiva</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-title">¿Cómo funcionan los dos modelos y cuál acierta más?</div>', unsafe_allow_html=True)
     st.markdown(
-        '<div class="section-desc">Validación estadística fuera de muestra sobre <b>6,482 operaciones crediticias</b> '
-        'comparando el desempeño del modelo paramétrico tradicional frente al ensamble no lineal de árboles de decisión.</div>',
+        '<div class="section-desc">Comparamos en <b>6,482 préstamos reales</b> la fórmula bancaria tradicional (<b>Champion</b>) '
+        'frente al modelo de Machine Learning basado en 300 árboles de decisión (<b>Challenger</b>).</div>',
         unsafe_allow_html=True,
     )
+
+    st.markdown("""
+    <div class="copper-callout" style="margin-bottom: 14px;">
+        <b>Cómo leer la tabla de resultados en palabras simples:</b><br>
+        • <b>ROC-AUC e Índice Gini:</b> Qué tan bien ordena el modelo a los solicitantes desde el más confiable hasta el más riesgoso <i>(más cerca de 1.00 es mejor)</i>.<br>
+        • <b>Separación KS:</b> Qué tan clara es la frontera entre el grupo que sí paga y el grupo que deja de pagar <i>(mientras más alto el %, mejor)</i>.<br>
+        • <b>Exactitud:</b> Porcentaje total de casos donde el modelo acertó <i>(mientras más alto, mejor)</i> · <b>Calibración (Brier):</b> Error de los porcentajes estimados <i>(más cerca de 0.00 es mejor)</i>.
+    </div>
+    """, unsafe_allow_html=True)
 
     st.markdown("""
     <table class="fin-table">
         <thead>
             <tr>
-                <th>Arquitectura del Modelo</th>
+                <th>Modelo Evaluado</th>
                 <th>ROC-AUC</th>
                 <th>Índice Gini</th>
-                <th>Estadístico KS</th>
-                <th>Brier Score</th>
+                <th>Separación KS</th>
+                <th>Calibración Brier</th>
                 <th>Exactitud</th>
                 <th>F1-Score</th>
             </tr>
         </thead>
         <tbody>
             <tr>
-                <td>Regresión Logística · Scorecard Bancario WoE <span class="badge-champion">CHAMPION</span></td>
+                <td>Regresión Logística · Scorecard Bancario Clásico <span class="badge-champion">CHAMPION</span></td>
                 <td>0.8746</td>
                 <td>0.7493</td>
                 <td>62.62%</td>
@@ -926,7 +937,7 @@ with tab_audit:
                 <td>0.6846</td>
             </tr>
             <tr class="win-row">
-                <td>Random Forest Classifier · Ensamble de 300 Árboles <span class="badge-challenger">CHALLENGER</span></td>
+                <td>Random Forest · Modelo Avanzado de 300 Árboles <span class="badge-challenger">CHALLENGER</span></td>
                 <td>0.9330</td>
                 <td>0.8661</td>
                 <td>72.98%</td>
@@ -945,12 +956,12 @@ with tab_audit:
         with st.container(border=True):
             ks_hdr_c1, ks_hdr_c2 = st.columns([2.2, 1])
             with ks_hdr_c1:
-                st.markdown('<div class="card-title-main">Curva de Separación Kolmogorov-Smirnov</div>', unsafe_allow_html=True)
-                st.markdown('<div class="card-subtitle-muted">Capacidad de discriminación entre cartera vigente y cartera vencida</div>', unsafe_allow_html=True)
+                st.markdown('<div class="card-title-main">¿Qué tan bien separa pagadores de morosos?</div>', unsafe_allow_html=True)
+                st.markdown('<div class="card-subtitle-muted">Curva de separación KS al ordenar a los clientes de mayor a menor riesgo</div>', unsafe_allow_html=True)
             with ks_hdr_c2:
                 st.markdown(
                     '<div style="background-color: #FDF3ED; border: 1px solid #FDBA74; border-radius: 6px; padding: 6px 12px; text-align: right;">'
-                    '<div style="font-size: 0.68rem; font-weight: 700; text-transform: uppercase; color: #9A3412;">ESTADÍSTICO KS</div>'
+                    '<div style="font-size: 0.68rem; font-weight: 700; text-transform: uppercase; color: #9A3412;">SEPARACIÓN KS</div>'
                     '<div style="font-size: 1.15rem; font-weight: 800; color: #1C1917;" class="tabular-nums">72.98%</div>'
                     '</div>',
                     unsafe_allow_html=True,
@@ -958,7 +969,7 @@ with tab_audit:
 
             st.markdown(
                 '<div style="font-size: 0.82rem; color: #57534E; margin-bottom: 10px; line-height: 1.5;">'
-                'Evalúa la distancia acumulada máxima entre la distribución de clientes en incumplimiento y clientes cumplidos al ordenar la cartera por nivel de riesgo estimado.'
+                'Mientras más abierta se vea la distancia entre la línea naranja (quienes caen en impago) y la línea oscura (quienes pagan bien), mejor filtra el modelo el riesgo.'
                 '</div>',
                 unsafe_allow_html=True,
             )
@@ -1005,11 +1016,11 @@ with tab_audit:
 
     with aud_c2:
         with st.container(border=True):
-            st.markdown('<div class="card-title-main">Poder Predictivo por Variable</div>', unsafe_allow_html=True)
-            st.markdown('<div class="card-subtitle-muted">Jerarquía de variables según su índice Information Value</div>', unsafe_allow_html=True)
+            st.markdown('<div class="card-title-main">¿Qué datos pesan más al evaluar a una persona?</div>', unsafe_allow_html=True)
+            st.markdown('<div class="card-subtitle-muted">Importancia de cada dato del cliente para anticipar si pagará a tiempo</div>', unsafe_allow_html=True)
             st.markdown(
                 '<div style="font-size: 0.82rem; color: #57534E; margin-bottom: 10px; line-height: 1.5;">'
-                'Las variables que superan el umbral de 0.30 constituyen los indicadores primarios de solvencia en el modelo de originación.'
+                'Las barras en color cobre (por encima de 0.30) son los indicadores clave: qué tan pesada es la deuda frente a su sueldo, su grado en buró y la tasa del crédito.'
                 '</div>',
                 unsafe_allow_html=True,
             )
@@ -1158,7 +1169,14 @@ with tab_audit:
     with gov_c3:
         st.markdown("""
         <div class="gov-card">
-            <div class="gov-step-title">Paso 3 · Promoción a Champion</div>
-            <div class="gov-step-desc">Tras validar consistencia en cosechas reales y cumplimiento regulatorio, el retador asume como nuevo modelo titular.</div>
+            <div class="gov-step-title">Paso 3 · Promoción a Titular</div>
+            <div class="gov-step-desc">Una vez comprobado que los clientes aprobados pagan bien en la vida real, el modelo nuevo se convierte en el principal.</div>
         </div>
         """, unsafe_allow_html=True)
+
+st.markdown(
+    '<div style="border-top: 1px solid #E7E5E4; margin-top: 2.5rem; padding-top: 1.25rem; text-align: center; color: #78716C; font-size: 12px; font-weight: 500;">'
+    'Proyecto personal de Ciencia de Datos con fines demostrativos y de portafolio · Javier García Sánchez · Python, Scikit-Learn, Plotly y Streamlit'
+    '</div>',
+    unsafe_allow_html=True,
+)
